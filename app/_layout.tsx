@@ -48,6 +48,15 @@ export default function RootLayout() {
               },
               headerShown: true,
             }} />
+      <Stack.Screen 
+            name="selectMode"
+            options={{
+              title: "Select Mode",
+              headerTitleStyle: {
+                fontSize: 24,
+              },
+              headerShown: true,
+            }} />
     </Stack>
   );
 }

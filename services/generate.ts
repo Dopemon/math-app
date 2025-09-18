@@ -2,7 +2,7 @@ export const generate: {
     randomNumber: (min: number, max: number) => number,
     randomOperand: (arr: string[]) => string,
     mergedArray: (arr1: number[], arr2: string[]) => any[],
-    randomProblem: (digits: number[], numbers: number, operands: string[]) => {problem: string, answer: number}
+    randomProblem: (digits: number, numbers: number, operands: string[]) => {problem: string, answer: string}
 } = {
     randomNumber: (min: number, max: number) => {
         return Math.floor(Math.random() * (max-min) + min);
@@ -23,8 +23,9 @@ export const generate: {
         return result;
     },
 
-    randomProblem: (digits: number[] = [1,2], numbers: number = 2, operands: string[] = ["+", "-", "*", "/"]) => {
-        var formula = "";
+    randomProblem: (digits: number = 1, numbers: number = 2, operands: string[] = ["+", "-", "*", "/"]) => {
+        var problem = "";
+        var answer = 0;
         var formulaNumbers = [];
         var formulaOperands = [];
         var numbersLeft = numbers;
@@ -32,27 +33,37 @@ export const generate: {
 
         for(var i = 0; i< numbers-1; i++){
             if(i == 0){
-                var newNum = generate.randomNumber(digits[0],digits[1])
+                var newNum = generate.randomNumber(0,Math.pow(10,digits))
                 formulaNumbers.push(newNum);
             }
             var operand = generate.randomOperand(operands);
             if(operand == "/"){
                 var n1: number = formulaNumbers[ formulaNumbers.length-1 ];
-                var n2: number = generate.randomNumber( digits[0], digits[1] );
+                var n2: number = generate.randomNumber( 0, Math.pow(10,digits));
                 var n3: number = n1 * n2;
                 formulaNumbers.pop();
                 formulaNumbers.push(n3)
                 formulaOperands.push(operand);
                 formulaNumbers.push(n2)
             }else{
-                var n2: number = generate.randomNumber( digits[0], digits[1] );
+                var n2: number = generate.randomNumber( 0, Math.pow(10,digits));
                 formulaOperands.push(operand)
                 formulaNumbers.push(n2);
             }
         }
 
-        formula = generate.mergedArray(formulaNumbers, formulaOperands).join(" ");
+        console.log("problem", problem);
+        console.log("answer", answer);
 
-        return {problem: formula, answer: eval(formula)};
+        problem = generate.mergedArray(formulaNumbers, formulaOperands).join(" ");
+        answer = eval(problem);
+
+        if(!Number.isInteger(answer)){ 
+            console.log("rerunning to avoid: ", answer);
+            return generate.randomProblem(digits, numbers, operands) ;
+        }
+
+        console.log({ problem, answer: ""+answer })
+        return { problem, answer: ""+answer };
     }
 }

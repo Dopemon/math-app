@@ -9,7 +9,7 @@ const Settings = () => {
     const [numberLength, setNumberLength] = useState(["#"]);
 
     const operandOptions = ["+", "-", "*", "/"];
-    const [operands, setOperands] = useState(["+"]);
+    const [operands, setOperands] = useState(["+", "-", "*", "/"]);
 
     const [minMaxNumberRange, setMinMaxNumberRange] = useState([1,10])
 

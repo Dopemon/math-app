@@ -1,25 +1,72 @@
-import { useRouter } from 'expo-router';
-import React, { useState } from 'react';
-import { StyleSheet, Text, TextInput, View } from 'react-native';
+import { mode } from '@/constants/modes';
+import { generate } from '@/services/generate';
+import { useLocalSearchParams, useRouter } from 'expo-router';
+import React, { useEffect, useRef, useState } from 'react';
+import { KeyboardAvoidingView, Platform, ScrollView, StyleSheet, Text, TextInput, View } from 'react-native';
 
 const Play = () => {
-
     const router = useRouter();
+    const { settings } = useLocalSearchParams();
+    const gameSettings = JSON.parse(settings as string) as mode;
 
     const [input, setInput] = useState("");
     const [activeProblem, setActiveProblem] = useState(0);
     const [complete, setComplete] = useState(false);
+    const [problems, setProblems] = useState<{problem: string, answer: string}[]>([]);
 
-    const problems = [
-        {problem: "5 * 5", answer: "25"},
-        {problem: "5 + 5", answer: "10"},
-        {problem: "2 + 4", answer: "6"},
-        {problem: "4 * 8", answer: "32"},
-        {problem: "10 + 5", answer: "15"},
-        {problem: "10 / 2", answer: "5"},
-    ]
+    const formatTime = (milliseconds: number) => {
+        const totalSeconds = Math.floor(milliseconds / 1000);
+        const ms = milliseconds % 1000;
+        const h = Math.floor(totalSeconds / 3600);
+        const m = Math.floor((totalSeconds % 3600) / 60);
+        const s = totalSeconds % 60;
+      
+        return `${h.toString().padStart(2, '0')}:${m.toString().padStart(2, '0')}:${s.toString().padStart(2, '0')}.${ms.toString().padStart(3, '0')}`;
+      };
+
+    const [time, setTime] = useState(0);
+    const [isRunning, setIsRunning] = useState(false);
+    const timerRef = useRef(0);
+
+    useEffect(() => {
+        if (isRunning) {
+            const startTime = Date.now() - time;
+            timerRef.current = setInterval(() => {
+            setTime(Date.now() - startTime);
+            }, 10); // Update every 10ms for smooth display
+        } else {
+            clearInterval(timerRef.current);
+        }
+        return () => clearInterval(timerRef.current);
+    }, [isRunning, time]);
+
+    useEffect(() => {
+        if (problems.length > 0) {
+            setIsRunning(true);
+        }
+    }, [problems]);
+    
+    useEffect(()=>{
+        var newProblems = [];
+        for(var i = 0;i<gameSettings.problemCount;i++){
+            var newProblem = 
+            generate.randomProblem(
+                gameSettings.digits, 
+                gameSettings.numbers, 
+                gameSettings.operands
+            )
+            newProblems.push(newProblem);
+        }
+        setProblems(newProblems);
+    },[])
+
   return (
-    <View style={styles.container}>
+    // <View style={styles.container}>
+    <KeyboardAvoidingView
+            style={styles.container}
+            behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+            keyboardVerticalOffset={Platform.OS === 'ios' ? 64 : 0}>
+        <Text style={styles.timerText}>{formatTime(time)}</Text>
         <View style={{...styles.problemContainer}}>
             <Text style={{...styles.problem, opacity: 0.2}}>
                 {problems[activeProblem-1] ? problems[activeProblem-1].problem : ""}
@@ -31,27 +78,40 @@ const Play = () => {
                 {problems[activeProblem+1] ? problems[activeProblem+1].problem : ""}
             </Text>
         </View>
-        <TextInput 
-            style={styles.input} 
-            value={input} 
-            onChangeText={(v)=>{
-                if(v === problems[activeProblem].answer){
-                    if(activeProblem < problems.length-1){
-                        setInput("");
-                        setActiveProblem(activeProblem+1);
+        
+        <ScrollView contentContainerStyle={styles.scrollContainer}>
+            <TextInput 
+                style={styles.input} 
+                value={input} 
+                onChangeText={(v)=>{
+                    if(v === problems[activeProblem].answer){
+                        if(activeProblem < problems.length-1){
+                            setInput("");
+                            setActiveProblem(activeProblem+1);
+                        }else{
+                            setInput("");
+                            setComplete(true);
+                            setIsRunning(false);
+                            router.push({
+                                pathname: "../results", 
+                                params: { results: JSON.stringify({
+                                    time: formatTime(time), 
+                                    problems: gameSettings.problemCount, 
+                                    operands: ["+", "-", "*", "/"], 
+                                    digits: gameSettings.digits, 
+                                    numbers: gameSettings.numbers
+                                })}
+                            });
+                        }
                     }else{
-                        console.log("COMPLETE");
-                        setInput("");
-                        setComplete(true);
-                        router.push("../results");
+                        setInput(v);
                     }
-                }else{
-                    setInput(v);
-                }
-            }} 
-            keyboardType="numeric" 
-            autoFocus />
-    </View>
+                }} 
+                keyboardType="numeric" 
+                autoFocus />
+        </ScrollView>
+    </KeyboardAvoidingView>
+    // </View>
   )
 }
 
@@ -61,10 +121,20 @@ const styles = StyleSheet.create({
     container:{
         flex: 1
     },
+    scrollContainer: {
+        flexGrow: 1,
+        justifyContent: 'center',
+        marginBottom: 40
+    },
     problemContainer:{
-        paddingVertical:40,
-        maxHeight: 200,
-        overflow:'hidden'
+        paddingVertical:0,
+        marginTop: 100,
+        // flex: 1,
+        display: 'flex',
+        // maxHeight: 200,
+        overflow:'hidden',
+        justifyContent: 'center',
+        alignItems:'center'
     },
     problem:{
         fontSize: 46,
@@ -74,6 +144,12 @@ const styles = StyleSheet.create({
         borderWidth: 2,
         borderColor: 'black',
         fontSize: 46,
-        textAlign:'center'
-    }
+        textAlign:'center',
+        marginBottom: 70
+    },
+    timerText: {
+        fontSize: 42,
+        textAlign:'center',
+        opacity:0.7
+      },
 })

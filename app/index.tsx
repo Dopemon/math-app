@@ -13,19 +13,19 @@ const Index = () => {
       </View>
       <FlatList 
         contentContainerStyle={styles.menuContainer}
-        data={["Play", "Settings", "Leaderboard"]}
-        keyExtractor={item => item}
-        renderItem={({item}: {item: string}) => (
+        data={[{label: "Play", value: "selectMode"}, {label: "Settings", value: "settings"}, {label:"Leaderboard", value:"leaderboard"}]}
+        keyExtractor={item => item.value}
+        renderItem={({item}: {item: {label: string, value: string}}) => (
           <Pressable 
-            key={item} 
+            key={item.value} 
             style={({ pressed }) => [
               {backgroundColor: pressed ? '#000' : '#f0f0f0'}, 
               styles.menuItem 
             ]}
-            onPress={()=>{ router.push(`./${item.toLowerCase()}`) }}>
+            onPress={()=>{ router.push(`./${item.value}`) }}>
             {({pressed}) => (
               <Text style={pressed ? {...styles.menuItemText, color: '#fff'} : styles.menuItemText}>
-                {item}
+                {item.label}
               </Text>
             )}
           </Pressable>
@@ -33,7 +33,7 @@ const Index = () => {
       />
       <View style={styles.footerContainer}>
         <Pressable onPress={() => {
-          console.log(generate.randomProblem([1,10], 3, ["+","-","*","/"]))
+          console.log(generate.randomProblem(1, 3, ["+","-","*","/"]))
         }}>
           <Text>Generate</Text>
         </Pressable>
