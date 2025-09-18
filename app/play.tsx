@@ -124,14 +124,10 @@ const styles = StyleSheet.create({
     scrollContainer: {
         flexGrow: 1,
         justifyContent: 'center',
-        marginBottom: 40
     },
     problemContainer:{
         paddingVertical:0,
-        marginTop: 100,
-        // flex: 1,
         display: 'flex',
-        // maxHeight: 200,
         overflow:'hidden',
         justifyContent: 'center',
         alignItems:'center'
@@ -145,11 +141,12 @@ const styles = StyleSheet.create({
         borderColor: 'black',
         fontSize: 46,
         textAlign:'center',
-        marginBottom: 70
+        marginTop: -40
     },
     timerText: {
         fontSize: 42,
         textAlign:'center',
-        opacity:0.7
+        opacity:0.7,
+        marginTop:30
       },
 })
