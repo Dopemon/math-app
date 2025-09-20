@@ -1,15 +1,21 @@
+import { colors } from '@/constants/styles';
 import { generate } from '@/services/generate';
 import { useRouter } from 'expo-router';
 import React from 'react';
-import { FlatList, Pressable, StyleSheet, Text, View } from 'react-native';
+import { FlatList, Pressable, StyleSheet, Text, View, useColorScheme } from 'react-native';
 
 const Index = () => {
   const router = useRouter();
+  const colorScheme = useColorScheme();
+
+  const { primary, secondary } = colors[colorScheme || "light"] as colors
+
+  console.log(colorScheme);
 
   return (
-    <View style={styles.baseContainer}>
+    <View style={{...styles.baseContainer, backgroundColor: primary}}>
       <View style={styles.titleContainer}>
-        <Text style={styles.title}>Math App</Text>
+        <Text style={{...styles.title, color: secondary}}>Math App</Text>
       </View>
       <FlatList 
         contentContainerStyle={styles.menuContainer}
@@ -19,12 +25,12 @@ const Index = () => {
           <Pressable 
             key={item.value} 
             style={({ pressed }) => [
-              {backgroundColor: pressed ? '#000' : '#f0f0f0'}, 
-              styles.menuItem 
+              {backgroundColor: pressed ? secondary : primary}, 
+              {...styles.menuItem, borderColor: secondary}
             ]}
             onPress={()=>{ router.push(`./${item.value}`) }}>
             {({pressed}) => (
-              <Text style={pressed ? {...styles.menuItemText, color: '#fff'} : styles.menuItemText}>
+              <Text style={pressed ? {...styles.menuItemText, color: primary} : {...styles.menuItemText, color: secondary}}>
                 {item.label}
               </Text>
             )}
@@ -33,7 +39,7 @@ const Index = () => {
       />
       <View style={styles.footerContainer}>
         <Pressable onPress={() => {
-          console.log(generate.randomProblem(1, 3, ["+","-","*","/"]))
+          console.log(generate.randomProblem([1,1], [2,3], ["+","-","*","/"]))
         }}>
           <Text>Generate</Text>
         </Pressable>
@@ -49,7 +55,6 @@ const styles = StyleSheet.create({
     flex: 1,
     alignContent: 'space-between',
     padding: 24,
-    backgroundColor: '#eaeaea'
   },
   titleContainer:{
     flex: 1,
@@ -64,7 +69,6 @@ const styles = StyleSheet.create({
   menuItem:{
     flex: 1,
     paddingHorizontal: 40,
-    borderColor: '#000',
     borderWidth: 2,
     height: 50,
     borderRadius: 25,

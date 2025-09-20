@@ -1,40 +1,42 @@
 import React from 'react';
 import { Pressable, StyleSheet, Text, View } from 'react-native';
 
-const Picker = ({selectionMax, fontSize, arr, selected, onPress}:{
+const Picker = ({colors, selectionMax, fontSize, arr, selected, onPress}:{
+    colors: {primary: string, secondary: string}
     selectionMax: number,
     fontSize: number,
-    arr:string[], 
-    selected:string[], 
-    onPress: (choice:string[])=>void
+    arr:{label: string, value: any}[], 
+    selected:{label: string, value: any}[], 
+    onPress: (choice:{label: string, value: any}[])=>void
 }) => {
+    const {primary, secondary} = colors;
     const padding = 2;
   return (
-    <View style={{...styles.container, borderRadius: 20}}>
+    <View style={{...styles.container, borderRadius: 20, borderColor: secondary}}>
         {
-            arr.map((str, i)=>(
+            arr.map((str, i)=>{console.log(str);return (
                 <Pressable 
-                    key={str} 
+                    key={str.label+"-"+str.value} 
                     style={({ pressed }) => [
-                        {backgroundColor: pressed||selected.includes(str) ? '#000' : '#f0f0f0'}, 
-                        i == 0 ? {...styles.firstItem} : {...styles.item}
+                        {backgroundColor: pressed||selected.find((v)=>v.value==str.value) ? secondary : primary}, 
+                        i == 0 ? {...styles.firstItem } : {...styles.item, borderLeftColor: selected.find((v)=>v.value==str.value) ? primary : secondary}
                     ]}
                     onPress={() => {
-                        if(selected.includes(str)){
-                            onPress(selected.filter(v => v!= str))
-                        }else if(!selected.includes(str) && selected.length<selectionMax){
+                        if(selected.find((v)=>v.value==str.value)){
+                            onPress(selected.filter(v => v.value!=str.value))
+                        }else if(!selected.find((v)=>v.value==str.value) && selected.length<selectionMax){
                             onPress([...selected, str])
                         }
                     }}>
 
                     {({pressed}) => (
-                        <Text style={pressed||selected.includes(str) ? {...styles.itemText, color: '#fff', fontSize, padding} : {...styles.itemText, fontSize, padding}}>
-                            {str}
+                        <Text style={pressed||selected.find((v)=>v.value==str.value) ? {...styles.itemText, color: primary, fontSize, padding} : {...styles.itemText, fontSize, padding, color: secondary}}>
+                            {str.label}
                         </Text>
                     )}
 
                 </Pressable>
-            ))
+            )})
         }
     </View>
   )
@@ -44,8 +46,8 @@ export default Picker
 
 const styles = StyleSheet.create({
     container:{
+        width:"100%",
         flexDirection:'row',
-        borderColor: 'black',
         borderWidth: 2,
         overflow:'hidden',
         height:40
@@ -58,8 +60,7 @@ const styles = StyleSheet.create({
         flex: 1,
         alignSelf: 'flex-start',
         marginVertical: 'auto',
-        borderLeftWidth: 1,
-        borderLeftColor:'black',
+        borderLeftWidth: 1
     },
     itemText:{
         display: 'flex',

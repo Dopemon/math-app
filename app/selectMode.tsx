@@ -1,34 +1,52 @@
 import { modes } from '@/constants/modes';
-import { useRouter } from 'expo-router';
-import React from 'react';
-import { FlatList, Pressable, StyleSheet, Text, View } from 'react-native';
+import { colors } from '@/constants/styles';
+import { useNavigation, useRouter } from 'expo-router';
+import React, { useEffect } from 'react';
+import { FlatList, Pressable, StyleSheet, Text, useColorScheme, View } from 'react-native';
 
 const SelectMode = () => {
   const router = useRouter();
+  const colorScheme = useColorScheme();
+  const { primary, secondary } = colors[colorScheme || "light"];
 
-//   const modes = 
-//   const modes = ["Easy", "Medium", "Hard"];
+  // Navigation
+  const navigation = useNavigation();
+
+  // Effect
+  useEffect(() => { 
+      const listener = navigation.addListener('beforeRemove', (e) => {
+          e.preventDefault();
+          router.push("/");
+      });
+      return () => {
+          navigation.removeListener('beforeRemove', listener);
+      };
+  }, []);
 
   return (
-    <View style={styles.container}>
+    <View style={{...styles.container, backgroundColor: primary}}>
       <FlatList 
               contentContainerStyle={styles.menuContainer}
-              data={Object.keys(modes)}
+              data={[...Object.keys(modes), "Custom"]}
               keyExtractor={item => item}
               renderItem={({ item }: { item: string }) => (
                 <Pressable 
                   style={({ pressed }) => [
-                    {backgroundColor: pressed ? '#000' : '#f0f0f0'}, 
-                    styles.menuItem 
+                    {backgroundColor: pressed ? secondary : primary}, 
+                    {...styles.menuItem, borderColor: secondary} 
                   ]}
                   onPress={()=>{ 
-                    router.push({ 
+                    if(item == "Custom"){
+                      router.push("/customize");
+                    }else{
+                      router.push({ 
                         pathname: `./play`, 
                         params: { settings: JSON.stringify(modes[item as keyof typeof modes]) }
-                    }) 
+                    })
+                    } 
                   }}>
                   {({pressed}) => (
-                    <Text style={pressed ? {...styles.menuItemText, color: '#fff'} : styles.menuItemText}>
+                    <Text style={pressed ? {...styles.menuItemText, color: primary} : {...styles.menuItemText, color: secondary}}>
                       {item.charAt(0).toUpperCase() + item.slice(1)}
                     </Text>
                   )}
@@ -45,7 +63,6 @@ const styles = StyleSheet.create({
     container:{
         flex: 1,
         padding: 24,
-        backgroundColor: '#eaeaea'
       },
     menuContainer:{
         flex: 1,
@@ -65,8 +82,6 @@ const styles = StyleSheet.create({
         justifyContent: 'center'
       },
       menuItemText:{
-        // height: '100%',
-        // width: '100%',
         textAlign: 'center',
         textAlignVertical: 'center',
         fontSize: 20,

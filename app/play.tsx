@@ -1,11 +1,15 @@
 import { mode } from '@/constants/modes';
+import { colors } from '@/constants/styles';
 import { generate } from '@/services/generate';
 import { useLocalSearchParams, useRouter } from 'expo-router';
 import React, { useEffect, useRef, useState } from 'react';
-import { KeyboardAvoidingView, Platform, ScrollView, StyleSheet, Text, TextInput, View } from 'react-native';
+import { KeyboardAvoidingView, Platform, ScrollView, StyleSheet, Text, TextInput, useColorScheme, View } from 'react-native';
 
 const Play = () => {
     const router = useRouter();
+    const colorScheme = useColorScheme();
+    const { primary, secondary } = colors[colorScheme || "light"];
+
     const { settings } = useLocalSearchParams();
     const gameSettings = JSON.parse(settings as string) as mode;
 
@@ -61,27 +65,26 @@ const Play = () => {
     },[])
 
   return (
-    // <View style={styles.container}>
     <KeyboardAvoidingView
-            style={styles.container}
+            style={{...styles.container, backgroundColor:primary}}
             behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
             keyboardVerticalOffset={Platform.OS === 'ios' ? 64 : 0}>
-        <Text style={styles.timerText}>{formatTime(time)}</Text>
+        <Text style={{...styles.timerText, color: secondary}}>{formatTime(time)}</Text>
         <View style={{...styles.problemContainer}}>
-            <Text style={{...styles.problem, opacity: 0.2}}>
+            <Text style={{...styles.problem, opacity: 0.2, color: secondary}}>
                 {problems[activeProblem-1] ? problems[activeProblem-1].problem : ""}
             </Text>
-            <Text style={styles.problem}>
+            <Text style={{...styles.problem, color: secondary}}>
                 {problems[activeProblem] ? problems[activeProblem].problem : ""}
             </Text>
-            <Text style={{...styles.problem, opacity: 0.2}}>
+            <Text style={{...styles.problem, opacity: 0.2, color: secondary}}>
                 {problems[activeProblem+1] ? problems[activeProblem+1].problem : ""}
             </Text>
         </View>
         
         <ScrollView contentContainerStyle={styles.scrollContainer}>
             <TextInput 
-                style={styles.input} 
+                style={{...styles.input, backgroundColor: primary, color: secondary, borderColor: secondary}} 
                 value={input} 
                 onChangeText={(v)=>{
                     if(v === problems[activeProblem].answer){
@@ -95,6 +98,7 @@ const Play = () => {
                             router.push({
                                 pathname: "../results", 
                                 params: { results: JSON.stringify({
+                                    mode: gameSettings.name,
                                     time: formatTime(time), 
                                     problems: gameSettings.problemCount, 
                                     operands: ["+", "-", "*", "/"], 
@@ -111,7 +115,6 @@ const Play = () => {
                 autoFocus />
         </ScrollView>
     </KeyboardAvoidingView>
-    // </View>
   )
 }
 

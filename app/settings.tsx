@@ -1,15 +1,33 @@
 import Picker from '@/component/picker';
+import { colors } from '@/constants/styles';
 import MultiSlider from '@ptomasroos/react-native-multi-slider';
 import React, { useState } from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, Text, useColorScheme, View } from 'react-native';
 
 const Settings = () => {
+    const colorScheme = useColorScheme();
+    const { primary, secondary } = colors[colorScheme || "light"];
 
-    const numberLengthOptions = ["#", "##", "###", "####"];
-    const [numberLength, setNumberLength] = useState(["#"]);
+    const numberLengthOptions = [
+        {label: "#", value: 1}, 
+        {label: "##", value: 2}, 
+        {label: "###", value: 3}, 
+        {label: "####", value: 4}
+    ];
+    const [digits, setDigits] = useState([{label: "#", value: 1}]);
 
-    const operandOptions = ["+", "-", "*", "/"];
-    const [operands, setOperands] = useState(["+", "-", "*", "/"]);
+    const operandOptions = [
+        {label: "+", value: "+"}, 
+        {label: "-", value: "-"}, 
+        {label: "*", value: "*"}, 
+        {label: "/", value: "/"}
+    ];
+    const [operands, setOperands] = useState([
+        {label: "+", value: "+"}, 
+        {label: "-", value: "-"}, 
+        {label: "*", value: "*"}, 
+        {label: "/", value: "/"}
+    ]);
 
     const [minMaxNumberRange, setMinMaxNumberRange] = useState([1,10])
 
@@ -21,22 +39,24 @@ const Settings = () => {
             <Text style={styles.settingHeader}>Max Digits per Number</Text>
             <View style={{}}>
                 <Picker 
+                    colors={{primary, secondary}}
                     selectionMax={1}
                     fontSize={20}
                     arr={numberLengthOptions} 
-                    selected={numberLength}
-                    onPress={(choice:string[])=>{setNumberLength(choice)}} />
+                    selected={digits}
+                    onPress={(choice:{label:string,value:any}[])=>{setDigits(choice)}} />
             </View>
         </View>
         <View style={styles.section}>
             <Text style={styles.settingHeader}>Available Operands</Text>
             <View style={{}}>
                 <Picker 
+                    colors={{primary, secondary}}
                     selectionMax={4}
                     fontSize={20}
                     arr={operandOptions} 
                     selected={operands}
-                    onPress={(choice:string[])=>{setOperands(choice)}} />
+                    onPress={(choice:{label:string,value:any}[])=>{setOperands(choice)}} />
             </View>
         </View>
         <View style={styles.section}>
