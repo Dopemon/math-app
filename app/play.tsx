@@ -37,7 +37,7 @@ const Play = () => {
             const startTime = Date.now() - time;
             timerRef.current = setInterval(() => {
             setTime(Date.now() - startTime);
-            }, 10); // Update every 10ms for smooth display
+            }, 10);
         } else {
             clearInterval(timerRef.current);
         }
@@ -103,7 +103,8 @@ const Play = () => {
                                     problems: gameSettings.problemCount, 
                                     operands: ["+", "-", "*", "/"], 
                                     digits: gameSettings.digits, 
-                                    numbers: gameSettings.numbers
+                                    numbers: gameSettings.numbers,
+                                    timeInMs: time
                                 })}
                             });
                         }

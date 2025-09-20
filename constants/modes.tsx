@@ -36,5 +36,6 @@ export interface results{
     problems: number,
     operands: string[],
     digits: number[],
-    numbers: number[]
+    numbers: number[],
+    timeInMs: number
 }

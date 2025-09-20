@@ -26,6 +26,8 @@ const Picker = ({colors, selectionMax, fontSize, arr, selected, onPress}:{
                             onPress(selected.filter(v => v.value!=str.value))
                         }else if(!selected.find((v)=>v.value==str.value) && selected.length<selectionMax){
                             onPress([...selected, str])
+                        }else if(!selected.find((v)=>v.value==str.value) && selectionMax==1){
+                            onPress([str])
                         }
                     }}>
 

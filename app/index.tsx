@@ -1,5 +1,4 @@
 import { colors } from '@/constants/styles';
-import { generate } from '@/services/generate';
 import { useRouter } from 'expo-router';
 import React from 'react';
 import { FlatList, Pressable, StyleSheet, Text, View, useColorScheme } from 'react-native';
@@ -9,8 +8,6 @@ const Index = () => {
   const colorScheme = useColorScheme();
 
   const { primary, secondary } = colors[colorScheme || "light"] as colors
-
-  console.log(colorScheme);
 
   return (
     <View style={{...styles.baseContainer, backgroundColor: primary}}>
@@ -37,13 +34,6 @@ const Index = () => {
           </Pressable>
         )}
       />
-      <View style={styles.footerContainer}>
-        <Pressable onPress={() => {
-          console.log(generate.randomProblem([1,1], [2,3], ["+","-","*","/"]))
-        }}>
-          <Text>Generate</Text>
-        </Pressable>
-      </View>
     </View>
   )
 }

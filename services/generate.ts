@@ -24,10 +24,6 @@ export const generate: {
     },
 
     randomProblem: (digits: number[] = [1,1], numbers: number[] = [2,2], operands: string[] = ["+", "-", "*", "/"]) => {
-        console.log("generating with settings...");
-        console.log("digits: ", digits);
-        console.log("numbers: ", numbers);
-        console.log("operands: ", operands);
 
         var problem = "";
         var answer = 0;
@@ -62,8 +58,6 @@ export const generate: {
 
         problem = generate.mergedArray(formulaNumbers, formulaOperands).join(" ");
         answer = eval(problem);
-
-        console.log(problem);
 
         if(!Number.isInteger(answer)){ 
             return generate.randomProblem(digits, numbers, operands) ;
