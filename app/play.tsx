@@ -145,7 +145,7 @@ const styles = StyleSheet.create({
         borderColor: 'black',
         fontSize: 46,
         textAlign:'center',
-        marginTop: -40
+        marginTop: -55
     },
     timerText: {
         fontSize: 42,

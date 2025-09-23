@@ -1,11 +1,11 @@
 {
   "expo": {
-    "name": "math-app",
-    "slug": "math-app",
+    "name": "Dope Math",
+    "slug": "dope-math",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
-    "scheme": "mathapp",
+    "scheme": "dopemath",
     "userInterfaceStyle": "automatic",
     "newArchEnabled": true,
     "ios": {
@@ -19,7 +19,8 @@
         "monochromeImage": "./assets/images/android-icon-monochrome.png"
       },
       "edgeToEdgeEnabled": true,
-      "predictiveBackGestureEnabled": false
+      "predictiveBackGestureEnabled": false,
+      "package": "com.dopemon.dopemath"
     },
     "web": {
       "output": "static",
@@ -44,6 +45,12 @@
     "experiments": {
       "typedRoutes": true,
       "reactCompiler": true
+    },
+    "extra": {
+      "router": {},
+      "eas": {
+        "projectId": "6f6b406d-62d8-46e3-a137-b95615403d88"
+      }
     }
   }
 }
