@@ -11,12 +11,13 @@ const Index = () => {
 
   return (
     <View style={{...styles.baseContainer, backgroundColor: primary}}>
-      <View style={styles.titleContainer}>
-        <Text style={{...styles.title, color: secondary}}>Math App</Text>
-      </View>
       <FlatList 
         contentContainerStyle={styles.menuContainer}
-        data={[{label: "Play", value: "selectMode"}, {label: "Settings", value: "settings"}, {label:"Leaderboard", value:"leaderboard"}]}
+        data={[
+          {label: "Play", value: "selectMode"}, 
+          // {label: "Settings", value: "settings"}, 
+          {label:"Leaderboard", value:"leaderboard"}
+        ]}
         keyExtractor={item => item.value}
         renderItem={({item}: {item: {label: string, value: string}}) => (
           <Pressable 
@@ -43,7 +44,8 @@ export default Index
 const styles = StyleSheet.create({
   baseContainer:{
     flex: 1,
-    alignContent: 'space-between',
+    justifyContent:'center',
+    alignItems:'center',
     padding: 24,
   },
   titleContainer:{
@@ -54,10 +56,13 @@ const styles = StyleSheet.create({
     textAlign: 'center'
   },
   menuContainer:{
-    display: 'flex',
+    flex: 1,
+    justifyContent:'center',
+    alignItems:'center',
+    marginTop: -100
   },
   menuItem:{
-    flex: 1,
+    width:300,
     paddingHorizontal: 40,
     borderWidth: 2,
     height: 50,

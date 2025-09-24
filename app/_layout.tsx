@@ -11,7 +11,7 @@ export default function RootLayout() {
       <Stack.Screen 
             name="index"
             options={{
-              title: "Math App",
+              title: "Dope Math",
               headerTintColor:secondary,
               headerStyle: {
                 backgroundColor: primary
@@ -36,7 +36,7 @@ export default function RootLayout() {
               },
               headerShown: true,
             }} />
-      <Stack.Screen 
+      {/* <Stack.Screen 
             name="settings"
             options={{
               title: "Settings",
@@ -49,7 +49,7 @@ export default function RootLayout() {
                 color: secondary
               },
               headerShown: true,
-            }} />
+            }} /> */}
       <Stack.Screen 
             name="leaderboard"
             options={{
