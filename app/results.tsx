@@ -76,21 +76,21 @@ const Results = () => {
             <Text style={{...styles.result, color: secondary}}>Problems: {gameSettings.problems}</Text>
             <Text style={{...styles.result, color: secondary}}>Digits: {Math.min(...gameSettings.digits)}~{Math.max(...gameSettings.digits)}</Text>
             <Text style={{...styles.result, color: secondary}}>Operands: {gameSettings.operands.join(" ")}</Text>
-            <Text style={{...styles.result, color: secondary}}>Numbers: {Math.min(...gameSettings.numbers)}~{Math.min(...gameSettings.numbers)}</Text>
+            <Text style={{...styles.result, color: secondary}}>Numbers: {Math.min(...gameSettings.numbers)}~{Math.max(...gameSettings.numbers)}</Text>
         </View>
         <Modal visible={modalVisibility} transparent={true} animationType='slide'>
             <View style={{...styles.modal, backgroundColor: primary}}>
-                <Text style={{color: 'white', fontSize: 24, textAlign: 'center', marginBottom: 20}}>New High Score!</Text>
+                <Text style={{color: secondary, fontSize: 24, textAlign: 'center', marginBottom: 20}}>New High Score!</Text>
                 <TextInput 
                     autoCapitalize = {"characters"}
                     value={name} 
                     onChangeText={setName} 
-                    style={{...styles.textInput, color: secondary}} 
+                    style={{...styles.textInput, color: secondary, borderColor: secondary, borderBottomColor: secondary}} 
                     maxLength={5}
                     autoFocus={true}
                     autoComplete='off' 
                     autoCorrect={false} />
-                <Text style={{color: 'white', fontSize: 24, textAlign: 'center', marginTop: 20}}>{gameSettings.time}</Text>
+                <Text style={{color: secondary, fontSize: 24, textAlign: 'center', marginTop: 20}}>{gameSettings.time}</Text>
                 <Pressable 
                     style={({ pressed }) => [
                         {backgroundColor: pressed ? secondary : primary}, 
@@ -140,9 +140,7 @@ const styles = StyleSheet.create({
     },
     textInput: {
         borderWidth: 2,
-        borderColor: '#ffffff',
         borderBottomWidth: 2,
-        borderBottomColor: '#ffffff',
         fontSize: 18,
         padding: 5,
         width: '80%',

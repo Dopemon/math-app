@@ -16,6 +16,10 @@
     }
   },
   "submit": {
-    "production": {}
+    "production": {
+      "android": {
+        "serviceAccountKeyPath": "../pure-display-473015-c3-5add8f471a8e.json"
+      }
+    }
   }
 }
