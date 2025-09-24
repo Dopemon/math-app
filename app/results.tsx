@@ -34,7 +34,7 @@ const Results = () => {
             try {
                 await init();
                 const res = await fetchResults({mode: gameSettings.mode});
-                if(res.length < 10 || Math.max(...res.map(v=>v.time)) > gameSettings.timeInMs){
+                if(gameSettings.mode != "Custom" && (res.length < 10 || Math.max(...res.map(v=>v.time)) > gameSettings.timeInMs)){
                     setModalVisibility(true);
                 }
             }catch (err) {
@@ -74,9 +74,14 @@ const Results = () => {
             <Text style={{...styles.result, color: secondary}}>{gameSettings.mode}</Text>
             <Text style={{...styles.result, color: secondary}}>{gameSettings.time}</Text>
             <Text style={{...styles.result, color: secondary}}>Problems: {gameSettings.problems}</Text>
-            <Text style={{...styles.result, color: secondary}}>Digits: {Math.min(...gameSettings.digits)}~{Math.max(...gameSettings.digits)}</Text>
-            <Text style={{...styles.result, color: secondary}}>Operands: {gameSettings.operands.join(" ")}</Text>
-            <Text style={{...styles.result, color: secondary}}>Numbers: {Math.min(...gameSettings.numbers)}~{Math.max(...gameSettings.numbers)}</Text>
+            {
+                gameSettings.mode == 'Custom' &&
+                <>
+                    <Text style={{...styles.result, color: secondary}}>Digits: {Math.min(...gameSettings.digits)}~{Math.max(...gameSettings.digits)}</Text>
+                    <Text style={{...styles.result, color: secondary}}>Operands: {gameSettings.operands.join(" ")}</Text>
+                    <Text style={{...styles.result, color: secondary}}>Numbers: {Math.min(...gameSettings.numbers)}~{Math.max(...gameSettings.numbers)}</Text>
+                </>
+            }
         </View>
         <Modal visible={modalVisibility} transparent={true} animationType='slide'>
             <View style={{...styles.modal, backgroundColor: primary}}>

@@ -15,8 +15,8 @@ const Index = () => {
         contentContainerStyle={styles.menuContainer}
         data={[
           {label: "Play", value: "selectMode"}, 
-          // {label: "Settings", value: "settings"}, 
-          {label:"Leaderboard", value:"leaderboard"}
+          {label:"Leaderboard", value:"leaderboard"},
+          {label: "Info", value: "info"}
         ]}
         keyExtractor={item => item.value}
         renderItem={({item}: {item: {label: string, value: string}}) => (

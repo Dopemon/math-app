@@ -13,6 +13,10 @@ const Leaderboard = () => {
   const [selected, setSelected] = useState<{value: string, label: string}[]>([{value: "Easy", label: "Easy"}]);
 
   useEffect(() => {
+    if(selected.length == 0){
+      setResults([]);
+      return;
+    }
     const populateResults = async () => {
         try {
             await init();

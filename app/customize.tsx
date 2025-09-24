@@ -72,7 +72,7 @@ const Customize = () => {
             </View>
         </View>
         <View style={styles.section}>
-            <Text  style={{...styles.settingHeader, color: secondary}}>Available Operands</Text>
+            <Text  style={{...styles.settingHeader, color: secondary}}>Available Operations</Text>
             <View style={{flexDirection:'row', justifyContent:'space-around'}}>
                 <Picker 
                     colors={{primary, secondary}}

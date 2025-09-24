@@ -106,6 +106,20 @@ export default function RootLayout() {
               },
               headerShown: true,
             }} />
+      <Stack.Screen 
+            name="info"
+            options={{
+              title: "Info",
+              headerTintColor:secondary,
+              headerStyle: {
+                backgroundColor: primary
+              },
+              headerTitleStyle: {
+                fontSize: 24,
+                color: secondary
+              },
+              headerShown: true,
+            }} />
     </Stack>
   );
 }

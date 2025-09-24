@@ -22,7 +22,7 @@ export interface Result {
   name: string;
 }
 
-const dbName = 'test01.db';
+const dbName = 'results.db';
 let db: SQLiteDatabase | null = null;
 
 function printDirectory(directory: Directory, indent: number = 0) {
